@@ -1,3 +1,6 @@
+
+# meant to be a minimal example for using qGEL
+
 from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
