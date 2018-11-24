@@ -38,6 +38,7 @@ def gel(source_data_, k=10, learning_method="unsupervised", class_var=None):
            source_data_: a one-hot encoded dataframe
            k: number of eigenvectors to use for new embedding, if  'max' dim(source_data_) = dim(emb)
            learning_method: 'unsupervised' indicates no class label, otherwise 'supervised'
+           class_var: string - name of class variable
        Returns:
            emb: new embedded space
            v_t: vectors generated from svd
