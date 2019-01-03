@@ -4,7 +4,7 @@ suppressWarnings(
             "RSpectra","pryr","tidyr","data.table","Matrix")
 )
 
-# Creating weighted marginal
+# Creating weighted marginals
 
 freqTables <- function(x){
   v <- table(x)/length(x)
