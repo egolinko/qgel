@@ -32,7 +32,7 @@ def get_diag(d_, diag_idx_, i):
     return gd
 
 
-def gel(source_data_, k=10, learning_method="unsupervised", class_var=None):
+def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
     """
        Args:
            source_data_: a one-hot encoded dataframe
