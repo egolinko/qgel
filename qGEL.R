@@ -4,6 +4,21 @@ suppressWarnings(
             "RSpectra","pryr","tidyr","data.table","Matrix")
 )
 
+
+matrix_mult.cpp <- "
+// [[Rcpp::depends(RcppArmadillo, RcppEigen)]]
+#include <RcppArmadillo.h>
+#include <RcppEigen.h>
+// [[Rcpp::export]]
+SEXP eigenMapMatMult(const Eigen::Map<Eigen::MatrixXd> A, 
+Eigen::Map<Eigen::MatrixXd> B){
+Eigen::MatrixXd C = A * B;
+return Rcpp::wrap(C);
+}
+"
+
+sourceCpp(code = matrix_mult.cpp)
+
 # Creating weighted marginals
 
 freqTables <- function(x){
