@@ -129,7 +129,7 @@ qgel <- function(source.data_, k = 10, class_var = NULL,
     k <- k
   }
 
-  V <- svd(S, nv = k)$v
+  V <- svd(S/max(S), nv = k)$v
 
   ret <- list()
   ret$V <- V
