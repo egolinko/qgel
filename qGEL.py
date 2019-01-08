@@ -9,8 +9,8 @@ def get_diag_index(d_, l):
 
 
 def row_feature_rep(rows_, features_):
-    r_1 = rows_.mean(axis=1).as_matrix()
-    f_1 = features_.mean(axis=0).as_matrix()
+    r_1 = rows_.mean(axis=1).values
+    f_1 = features_.mean(axis=0).values
 
     r_0 = 1 - r_1
     f_0 = 1 - f_1
@@ -62,7 +62,7 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
 
         b = block_diag(*D)
 
-        S_ = np.matmul(b, mb.drop("Class", axis=1).as_matrix())
+        S_ = np.matmul(np.divide(b, np.max(b)), mb.drop("Class", axis=1).values)
 
         U, s, V = np.linalg.svd(S_)
 
@@ -70,7 +70,7 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
     else:
         mb = source_data_
         u = row_feature_rep(rows_=mb, features_=mb)
-        S_ = np.matmul(u, mb.as_matrix())
+        S_ = np.matmul(np.divide(u, np.max(u)), mb.values)
         U, s, V = np.linalg.svd(S_)
 
     if k == 'max':
@@ -79,8 +79,8 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
         v_t = V.transpose()[:, 0:k]
 
     if learning_method == 'supervised':
-        emb = np.matmul(mb.drop("Class", axis=1).as_matrix(), v_t)
+        emb = np.matmul(mb.drop("Class", axis=1).values, v_t)
     else:
-        emb = np.matmul(mb.as_matrix(), v_t)
+        emb = np.matmul(mb.values, v_t)
 
     return emb, v_t, mb, source_data_.rename(columns={"Class": class_var})
