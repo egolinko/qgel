@@ -62,9 +62,9 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
 
         b = block_diag(*D)
 
-        S_ = np.matmul(np.divide(b, np.max(b)), mb.drop("Class", axis=1).values)
+        S_x = np.matmul(np.divide(b, np.max(b)), mb.drop("Class", axis=1).values)
 
-        S_ = np.matmul(np.transpose(S_), S_)
+        S_ = np.matmul(np.transpose(S_x), S_x)
 
         U, s, V = np.linalg.svd(S_)
 
@@ -72,7 +72,8 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
     else:
         mb = source_data_
         u = row_feature_rep(rows_=mb, features_=mb)
-        S_ = np.matmul(np.divide(u, np.max(u)), mb.values)
+        S_x = np.matmul(np.divide(u, np.max(u)), mb.values)
+        S_ = np.matmul(np.transpose(S_x), S_x)
         U, s, V = np.linalg.svd(S_)
 
     if k == 'max':
