@@ -16,7 +16,7 @@ def gel_v_base(k):
 
     idx = np.random.uniform(0, 1, len(X)) <= .8
 
-    cp = gel(source_data_ = X[idx == True].reset_index().drop('index', axis = 1),
+    cp = qgel(source_data_ = X[idx == True].reset_index().drop('index', axis = 1),
               k = k, learning_method = 'supervised', class_var = "Class")
 
     print("GEL complete")
