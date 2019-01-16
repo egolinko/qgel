@@ -64,6 +64,8 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
 
         S_ = np.matmul(np.divide(b, np.max(b)), mb.drop("Class", axis=1).values)
 
+        S_ = np.matmul(np.transpose(S_), S_)
+
         U, s, V = np.linalg.svd(S_)
 
 
