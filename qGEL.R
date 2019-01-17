@@ -103,11 +103,12 @@ qgel <- function(source.data_, k = 10, class_var = NULL,
     
     b <- bdiag(D) %>% as.matrix()
     
-    S <- eigenMapMatMult(b,
+    Sx <- eigenMapMatMult(b,
                          as.matrix(sapply(W_ %>%
                                             select(-Class),
                                           function(x)
                                             as.numeric(as.character(x)))))
+    S <- eigenMapMatMult(t(Sx), Sx)
   }
     
   else {
@@ -115,10 +116,11 @@ qgel <- function(source.data_, k = 10, class_var = NULL,
                       f_ = sapply(W_, as.character),
                       d_ = W_)
 
-    S <- eigenMapMatMult(u,
+    Sx <- eigenMapMatMult(u,
                          as.matrix(sapply(W_ ,
                                           function(x)
                                             as.numeric(as.character(x)))))
+    S <- eigenMapMatMult(t(Sx), Sx)
 
   }
 
