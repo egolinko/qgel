@@ -1,62 +1,31 @@
-library(easypackages)
-suppressWarnings(
-  libraries("dplyr","Rcpp","RcppArmadillo","RcppEigen","parallel",
-            "RSpectra","pryr","tidyr","data.table","Matrix")
-)
 
-
-matrix_mult.cpp <- "
-// [[Rcpp::depends(RcppArmadillo, RcppEigen)]]
-#include <RcppArmadillo.h>
-#include <RcppEigen.h>
-// [[Rcpp::export]]
-SEXP eigenMapMatMult(const Eigen::Map<Eigen::MatrixXd> A, 
-Eigen::Map<Eigen::MatrixXd> B){
-Eigen::MatrixXd C = A * B;
-return Rcpp::wrap(C);
-}
-"
-
-sourceCpp(code = matrix_mult.cpp)
+library(dplyr)
+library(Matrix)
+library(caret)
 
 # Creating weighted marginals
 
-freqTables <- function(x){
-  v <- table(x)/length(x)
-  w <- data.frame(t(as.numeric(v)))
-  names(w) <- names(v)
-  return (w)
-}
 fbyEachClass <- function(r_, f_, d_){
 
-  if(is.null(dim(r_))){
-    Q <- matrix(1, nrow = (ncol(d_)-1), ncol = 1)
-  }
-  else {
-    binary_row_weights_ <- as.matrix(rbindlist(
-      lapply(1:nrow(r_), function(i) freqTables(r_[i,])), fill = T))
-    binary_row_weights_[is.na(binary_row_weights_)] <- 0
-    binary_row_weights <- as.data.frame(binary_row_weights_)
-    R <- binary_row_weights[sort(names(binary_row_weights))]
+  r_1 = rowMeans(r_)
+  f_1 = colMeans(f_)
+  
+  r_0 = 1 - r_1
+  f_0 = 1 - f_1
+  
+  f = data.frame(f_0, f_1)
+  r = data.frame(r_0, r_1)
 
-    binary_f_weights_ <- as.matrix(rbindlist(
-      lapply(1:ncol(f_), function(i) freqTables(f_[,i])), fill = T))
-    binary_f_weights_[is.na(binary_f_weights_)] <- 0
-    binary_f_weights <- as.data.frame(binary_f_weights_)
-    `F` <- binary_f_weights[sort(names(binary_f_weights))]
-
-    Q <- eigenMapMatMult(as.matrix(`F`), as.matrix(t(R)))
-  }
+  Q <- as.matrix(f) %*% as.matrix(t(r))
+  
   return(Q/max(Q))
 }
 
 # #diagonal aspects
 
 getD <- function(i, d_, dis_){
-  fbyEachClass(r_ = sapply(d_[dis_[[i]],]  %>%
-                             select(-Class), as.character),
-               f_ = sapply(d_[dis_[[i]],]  %>%
-                             select(-Class), as.character),
+  fbyEachClass(r_ = d_[dis_[[i]],],
+               f_ = d_[dis_[[i]],],
                d_ = d_)
 }
 
@@ -71,8 +40,8 @@ qgel <- function(source.data_, k = 10, class_var = NULL,
                                  names(sort(table(source.data_$Class),
                                             decreasing = T)))
 
-    source.data <- as.data.frame(apply(source.data_ %>%
-                                         arrange(Class), 2, as.character))
+    source.data <- as.data.frame(source.data_ %>% arrange(Class))
+    
     W_ <- source.data
   }
   else{
@@ -98,29 +67,24 @@ qgel <- function(source.data_, k = 10, class_var = NULL,
     }
 
     D <- lapply(1:length(diag_index_sets), function(i)
-      getD(i, d_ = W_, dis_ = diag_index_sets))
+      getD(i, d_ = W_ %>% select(-Class), dis_ = diag_index_sets))
     names(D) <- unique(W_$Class)
     
     b <- bdiag(D) %>% as.matrix()
     
-    Sx <- eigenMapMatMult(b,
-                         as.matrix(sapply(W_ %>%
-                                            select(-Class),
-                                          function(x)
-                                            as.numeric(as.character(x)))))
-    S <- eigenMapMatMult(t(Sx), Sx)
+    Sx <- b %*% as.matrix(W_ %>% select(-Class))
+                                          
+    S <- t(Sx) %*% Sx
   }
     
   else {
-    u <- fbyEachClass(r_ = sapply(W_, as.character),
-                      f_ = sapply(W_, as.character),
+    u <- fbyEachClass(r_ = W_,
+                      f_ = W_,
                       d_ = W_)
 
-    Sx <- eigenMapMatMult(u,
-                         as.matrix(sapply(W_ ,
-                                          function(x)
-                                            as.numeric(as.character(x)))))
-    S <- eigenMapMatMult(t(Sx), Sx)
+    Sx <- u %>% as.matrix() %*% as.matrix(W_)
+    
+    S <- t(Sx) %*% Sx
 
   }
 
@@ -138,18 +102,11 @@ qgel <- function(source.data_, k = 10, class_var = NULL,
   ret$W_ <- W_
 
   if (learning_method == "supervised"){
-    ret$embed <- as.data.frame(
-      as.matrix(
-        sapply(
-          W_ %>%
-            select(-Class), function(x) as.numeric(as.character(x)))) %*% V)
+    ret$embed <- as.data.frame(W_ %>% select(-Class) %>% as.matrix() %*% V)
     ret$embed[class_var] <- source.data$Class
   }
   else{
-    ret$embed <- as.data.frame(
-      as.matrix(
-        sapply(
-          W_, function(x) as.numeric(as.character(x)))) %*% V)
+    ret$embed <- as.data.frame(W_ %>% as.matrix() %*% V)
   }
 
   return(ret)}
