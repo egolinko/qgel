@@ -23,7 +23,7 @@ def gel_v_base(k):
 
     clf = XGBClassifier()
     clf.fit(X = cp[0], y = cp[2].Class)
-    pred = clf.predict(np.matmul(X.drop("Class", axis = 1)[idx == False], cp[1]))
+    pred = clf.predict(np.matmul(X.drop("Class", axis = 1)[idx == False].values, cp[1]))
 
     pd.crosstab(X[idx == False].Class, pred, rownames=['Actual'], colnames=['Predicted'])
     g = accuracy_score(X[idx == False].Class, pred)
