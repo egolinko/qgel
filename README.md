@@ -7,7 +7,7 @@ Golinko, Eric, and Xingquan Zhu. "Generalized feature embedding for supervised, 
 
 # Minimal Example
 
-`
+```{md}
 import qGEL
 
 import pandas as pd
@@ -27,4 +27,4 @@ idx = np.random.uniform(0, 1, len(X)) <= .8
 cp = qGEL.qgel(source_data_ = X[idx == True].reset_index().drop('index', axis = 1),
                k = 10, learning_method = 'supervised', class_var = "Class")
                
-`               
+```               
