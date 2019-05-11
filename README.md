@@ -18,13 +18,6 @@ pip install qGEL
 ```{md}
 import qGEL
 
-import pandas as pd
-import numpy as np
-from sklearn.metrics import accuracy_score
-from sklearn.naive_bayes import GaussianNB
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier
-
 dd = pd.read_csv("https://s3-us-west-2.amazonaws.com/researchs/GFEL_data/car.csv")
 
 X = pd.get_dummies(dd.drop("Class", axis=1))
