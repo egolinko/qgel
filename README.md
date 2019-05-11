@@ -5,6 +5,14 @@ Python implementation of qGEL, a quick way to Generalize, Embed, and Learn from 
 
 Golinko, Eric, and Xingquan Zhu. "Generalized feature embedding for supervised, unsupervised, and online learning tasks." Information Systems Frontiers 21.1 (2019): 125-142.
 
+# Install
+
+Via pip
+
+```{md}
+pip install qGEL
+```
+
 # Minimal Example
 
 ```{md}
