@@ -1,5 +1,5 @@
 # qGELpy
-Python implementation of qGEL
+Python implementation of qGEL, a quick way to Generalize, Embed, and Learn from data. A dimension reduction technique using naive distribution assumptions and simple matrix operations.
 
 # Based on the Paper 
 
