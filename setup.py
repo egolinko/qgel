@@ -1,8 +1,9 @@
 from setuptools import setup
 
 setup(name='qGEL',
-      version='0.1',
+      version='0.1.1',
       description='A quick way to qGEL',
+      long_description='A quick way to use the qGEL embedding : http://github.com/egolinko/qGELpy',
       url='http://github.com/egolinko/qGELpy',
       author='Eric Golinko',
       author_email='egolinko@gmail.com',
