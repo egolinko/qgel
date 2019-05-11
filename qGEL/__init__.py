@@ -1,1 +1,1 @@
-from qGEL import *
+from .qGEL import *
