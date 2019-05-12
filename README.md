@@ -24,6 +24,6 @@ X["Class"] = dd.Class
 
 idx = np.random.uniform(0, 1, len(X)) <= .8
 
-cp = qGEL.qgel(source_data_ = X[idx == True].reset_index().drop('index', axis = 1),
+embedding, vectors, sorted_X, orig_X = qGEL.qgel(source_data_ = X[idx == True].reset_index().drop('index', axis = 1),
                k = 10, learning_method = 'supervised', class_var = "Class")               
 ```               
