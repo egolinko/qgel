@@ -21,9 +21,11 @@ dd = pd.read_csv("https://s3-us-west-2.amazonaws.com/researchs/GFEL_data/car.csv
 
 X = pd.get_dummies(dd.drop("Class", axis=1))
 X["Class"] = dd.Class
-
-idx = np.random.uniform(0, 1, len(X)) <= .8
-
-embedding, vectors, sorted_X, orig_X = qGEL.qgel(source_data_ = X[idx == True].reset_index().drop('index', axis = 1),
-               k = 10, learning_method = 'supervised', class_var = "Class")               
+               
+embedding, vectors, sorted_X, orig_X = qGEL.qgel(source_data_ = X, 
+                                                 k = 10, 
+                                                 learning_method = 'supervised', 
+                                                 class_var = "Class"
+                                                )               
+               
 ```               
