@@ -86,4 +86,4 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
     else:
         emb = np.matmul(mb.values, v_t)
 
-    return emb, v_t, mb, source_data_.rename(columns={"Class": class_var})
+    return emb, v_t, mb
