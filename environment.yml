@@ -1,0 +1,10 @@
+name: qGEL
+channels:
+    - conda-forge
+dependencies:
+  - python=3.9.7
+  - pre-commit
+  - numpy
+  - pandas
+  - scipy
+  - jupyter

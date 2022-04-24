@@ -3,12 +3,12 @@ import pandas as pd
 from scipy.linalg import block_diag
 
 
-def get_diag_index(d_, l):
+def get_diag_index(d_: pd.DataFrame, l: int) -> pd.core.indexes.numeric.Int64Index:
     idx = d_[d_.Class == d_.Class.value_counts().index[l]].index
     return idx
 
 
-def row_feature_rep(rows_, features_):
+def row_feature_rep(rows_: pd.DataFrame, features_: pd.DataFrame) -> np.ndarray:
     r_1 = rows_.mean(axis=1).values
     f_1 = features_.mean(axis=0).values
 
@@ -23,38 +23,45 @@ def row_feature_rep(rows_, features_):
     return Q_
 
 
-def get_diag(d_, diag_idx_, i):
-    gd = row_feature_rep(rows_=d_.iloc[diag_idx_[i]]
-                         .drop("Class", axis=1),
-                         features_=d_.iloc[diag_idx_[i]]
-                         .drop("Class", axis=1))
+def get_diag(
+    d_: pd.DataFrame, diag_idx_: pd.core.indexes.numeric.Int64Index, i: int
+) -> np.ndarray:
+    gd = row_feature_rep(
+        rows_=d_.iloc[diag_idx_[i]].drop("Class", axis=1),
+        features_=d_.iloc[diag_idx_[i]].drop("Class", axis=1),
+    )
 
     return gd
 
 
-def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
+def qgel(
+    source_data_: pd.DataFrame,
+    k: int = 10,
+    learning_method: str = "unsupervised",
+    class_var: str = None,
+) -> list:
     """
-       Args:
-           source_data_: a one-hot encoded dataframe
-           k: number of eigenvectors to use for new embedding, if  'max' dim(source_data_) = dim(emb)
-           learning_method: 'unsupervised' indicates no class label, otherwise 'supervised'
-           class_var: string - name of class variable
-       Returns:
-           emb: new embedded space
-           v_t: vectors generated from svd
-           mb: one-hot data
-           source_data_: original data frame
+    Args:
+        source_data_: a one-hot encoded dataframe
+        k: number of eigenvectors to use for new embedding, if  'max' dim(source_data_) = dim(emb)
+        learning_method: 'unsupervised' indicates no class label, otherwise 'supervised'
+        class_var: string - name of class variable
+    Returns:
+        emb: new embedded space
+        v_t: vectors generated from svd
+        mb: one-hot data
+        source_data_: original data frame
     """
 
-    if learning_method == 'supervised':
+    if learning_method == "supervised":
         source_data_ = source_data_.rename(columns={class_var: "Class"})
         mb_ = source_data_.drop("Class", axis=1)
-        mb_['Class'] = pd.Categorical(source_data_.Class,
-                                      categories=source_data_.Class.value_counts()
-                                      .keys()
-                                      .tolist(),
-                                      ordered=True)
-        mb = mb_.sort_values(by='Class')
+        mb_["Class"] = pd.Categorical(
+            source_data_.Class,
+            categories=source_data_.Class.value_counts().keys().tolist(),
+            ordered=True,
+        )
+        mb = mb_.sort_values(by="Class")
 
         diag_idx = [get_diag_index(mb, l) for l in range(len(mb.Class.unique()))]
 
@@ -68,7 +75,6 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
 
         U, s, V = np.linalg.svd(S_)
 
-
     else:
         mb = source_data_
         u = row_feature_rep(rows_=mb, features_=mb)
@@ -76,12 +82,12 @@ def qgel(source_data_, k=10, learning_method="unsupervised", class_var=None):
         S_ = np.matmul(np.transpose(S_x), S_x)
         U, s, V = np.linalg.svd(S_)
 
-    if k == 'max':
+    if k == "max":
         v_t = V.transpose()
     else:
         v_t = V.transpose()[:, 0:k]
 
-    if learning_method == 'supervised':
+    if learning_method == "supervised":
         emb = np.matmul(mb.drop("Class", axis=1).values, v_t)
     else:
         emb = np.matmul(mb.values, v_t)
