@@ -4,6 +4,6 @@ COPY environment.yml .
 
 RUN conda env create -f environment.yml
 
-RUN echo "conda activate myenv" >> ~/.bashrc
+RUN echo "conda activate qGEL" >> ~/.bashrc
 
 SHELL ["/bin/bash", "--login", "-c"]
