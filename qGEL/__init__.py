@@ -1,1 +1,1 @@
-from .qGEL import *
+from .qgel import *  # noqa

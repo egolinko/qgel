@@ -1,4 +1,4 @@
-name: qGEL
+name: qgel
 channels:
     - conda-forge
 dependencies:
