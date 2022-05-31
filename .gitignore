@@ -1,3 +1,6 @@
+# Custom built
 *__pycache__
 *.csv
 .vscode/
+build
+qgel.egg-info
