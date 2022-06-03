@@ -3,7 +3,8 @@ import pandas as pd
 from scipy.linalg import block_diag
 
 
-def get_diag_index(df: pd.DataFrame, diag: int) -> pd.core.indexes.numeric.Int64Index:
+def get_diag_index(df: pd.DataFrame, diag: int
+) -> pd.core.indexes.numeric.Int64Index:
     idx = df[df.Class == df.Class.value_counts().index[diag]].index
     return idx
 
@@ -41,8 +42,10 @@ def qgel(
     """
     Args:
         one_hot_data: a one-hot encoded dataframe
-        k: number of eigenvectors to use for new embedding, if  'max' dim(one_hot_data) = dim(emb)
-        learning_method: 'unsupervised' indicates no class label, otherwise 'supervised'
+        k: number of eigenvectors to use for new embedding,
+            if  'max' dim(one_hot_data) = dim(emb)
+        learning_method: 'unsupervised' indicates no class label,
+            otherwise 'supervised'
         class_var: string - name of class variable
     Returns:
         emb: new embedded space
@@ -76,7 +79,8 @@ def qgel(
         B = block_diag(*D)
 
         S_norm = np.matmul(
-            np.divide(B, np.max(B)), feature_df_sorted.drop("Class", axis=1).values
+            np.divide(B, np.max(B)), 
+            feature_df_sorted.drop("Class", axis=1).values
         )
 
         S_kernel = np.matmul(np.transpose(S_norm), S_norm)
