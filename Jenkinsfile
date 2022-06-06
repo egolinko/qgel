@@ -1,5 +1,5 @@
 pipeline {
-  agent { docker { image 'python:3.9-bullseye' } }
+  agent { docker { image 'python:3.7.2' } }
   stages {
     stage('Checkout') {
       steps {
