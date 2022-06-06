@@ -1,5 +1,5 @@
 pipeline {
-  agent { docker { image 'python:3.9.7' } }
+  agent { docker { image 'python:3.9*' } }
   stage('Checkout') {
        git branch: 'main',
        credentialsId: '1889a3a3-80f8-4bb4-b656-f67f52fe11d8',
