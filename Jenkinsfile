@@ -1,6 +1,6 @@
 pipeline {
   // agent { docker { image 'python:3.7.2' } }
-  agent {label 'main-host'}
+  agent {label `main-host`}
   stages {
     stage('Checkout') {
       steps {
