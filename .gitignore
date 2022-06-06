@@ -4,3 +4,4 @@
 .vscode/
 build
 qgel.egg-info
+dist/
