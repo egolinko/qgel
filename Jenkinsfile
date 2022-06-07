@@ -4,6 +4,11 @@ pipeline {
       image 'python:3.7.2'
       }
     }
+  stage('out') {
+    steps {
+      sh 'echo ok'
+    }
+  }
   // stages {
   //   stage('Checkout') {
   //     steps {
