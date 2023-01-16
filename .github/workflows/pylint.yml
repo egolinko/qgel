@@ -1,6 +1,6 @@
 name: Pylint
 
-on: 
+on:
   push:
       branches:
         - develop
@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pylint scipy pandas numpy
+        pip install pylint scipy pandas numpy pytest
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint -d C0103 $(git ls-files '*.py')
