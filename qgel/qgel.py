@@ -4,11 +4,28 @@ from scipy.linalg import block_diag
 
 
 def get_diag_index(df: pd.DataFrame, diag: int) -> pd.core.indexes.numeric.Int64Index:
+    """Finds the index values of class labels.
+
+    Args:
+        df (pd.DataFrame): Dataframe.
+        diag (int): Index values.
+
+    Returns:
+        pd.core.indexes.numeric.Int64Index: _description_
+    """
     idx = df[df.Class == df.Class.value_counts().index[diag]].index
     return idx
 
 
 def row_feature_rep(df: pd.DataFrame) -> np.ndarray:
+    """Creates the row and column binary representations of data.
+
+    Args:
+        df (pd.DataFrame): Input data.
+
+    Returns:
+        np.ndarray: Matrix multipled data.
+    """
     row_mean = df.mean(axis=1).values
     feature_mean = df.mean(axis=0).values
 
@@ -27,6 +44,16 @@ def row_feature_rep(df: pd.DataFrame) -> np.ndarray:
 def get_diag(
     df: pd.DataFrame, diag_idx_: pd.core.indexes.numeric.Int64Index, i: int
 ) -> np.ndarray:
+    """Finds diagonal value of input.
+
+    Args:
+        df (pd.DataFrame): Input data.
+        diag_idx_ (pd.core.indexes.numeric.Int64Index): Indices of class index values.
+        i (int): Iteration through index.
+
+    Returns:
+        np.ndarray: Diagonal output.
+    """
     current_diag = row_feature_rep(df.iloc[diag_idx_[i]].drop("Class", axis=1))
 
     return current_diag

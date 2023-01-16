@@ -1,3 +1,3 @@
 def test_print():
-    """A test pytest test."""
+    """A test test."""
     print("great job")
