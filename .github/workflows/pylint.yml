@@ -24,4 +24,4 @@ jobs:
         pip install pylint scipy pandas numpy pytest
     - name: Analysing the code with pylint
       run: |
-        pylint -d C0103 C0114 R0914 $(git ls-files '*.py')
+        pylint -d C0103, C0114, R0914 $(git ls-files '*.py')
