@@ -110,7 +110,7 @@ def qgel(
 
         S_kernel = np.matmul(np.transpose(S_norm), S_norm)
 
-        U, s, V = np.linalg.svd(S_kernel)
+        U, s, V = np.linalg.svd(S_kernel)  # noqa
 
     else:
         feature_df_sorted = one_hot_data

@@ -43,11 +43,11 @@ dd = pd.read_csv("https://s3-us-west-2.amazonaws.com/researchs/GFEL_data/car.csv
 X = pd.get_dummies(dd.drop("Class", axis=1))
 X["Class"] = dd.Class
 
-embedding, vectors, source_data_ = qgel.qgel(source_data_ = X,
-                                             k = 10,
-                                             learning_method = 'supervised',
-                                             class_var = "Class"
-                                        )
+embedding, vectors, one_hot_data = qgel.qgel(
+     one_hot_data = X,
+     k = 10,
+     learning_method = 'supervised',
+     class_var = "Class")
 
 ```
 
